@@ -1,30 +1,30 @@
 # Load Balancing with Nginx 
 
-in this project i am to configure a webserver that will be used as a load balancer
+in this project I am to configure a webserver that will be used as a load balancer
 
 #### Step 1
 
-I created three EC2 instances one to be used as a loadbalancer and the two others to be used by the load balancer.
+I created three EC2 instances one to be used as a load balancer and the two others to be used by the load balancer.
 
-to do so i first created the two other servers namely 
+to do so I first created two other servers namely 
 
 `server load 1`
 
 `server load 2`
 
-and i configured them as follows
+and I configured them as follows
 
-i opened port 8000 to allow traffic form anywhere 
+I opened port 8000 to allow traffic from anywhere 
 
-i opened the instance summary of the `server load 1` as shown below
+I opened the instance summary of the `server load 1` as shown below
 
 ![server load 1 instance summary](<img/4 instance summary.png>)
 
-next i clicked in the security tab as seen below
+next, I clicked on the security tab as seen below
 
 ![security tab](<img/5 security groups option.png>)
 
-afterwhich i clicked on the security groups to open another webpage where i clicked on the following steps 
+after I clicked on the security groups to open another webpage where I clicked on the following steps 
 
 `"actions" >> "edit inbound rules"` 
 
@@ -33,7 +33,7 @@ as shown below
 ![edit inbound rules](<img/edit inbound rules.png>)
 
 
-i added a new rule and chose the following paramaters 
+I added a new rule and chose the following parameters 
 
 `custom TCP`
 `port = 8000`
@@ -43,29 +43,29 @@ as shown below
 
 ![add port 8000 ](<img/6 add port 8000 to security groups.png>)
 
-Next i ssh into my server through my terminal
+Next, I ssh into my server through my terminal
 
 as shown below
 
 ![connect to server instance](<img/7 connect to server instance.png>)
 
 
-next i installed apache using the command below 
+next, I installed apache using the command below 
 
 `sudo apt update -y &&  sudo apt install apache2 -y
 `
 
 ![install apache sotware](<img/8 install apache webserver.png>)
 
-next i verify the apache is running using the code below
+next, I verify the apache is running using the code below
 
 `sudo systemctl status apache2`
 
 ![verify apache is running](<img/9 verify apache is runnng correctly.png>)
 
-The next step is for me to configure the apache to serve webpage on port `8000`
+The next step is for me to configure the apache to serve the webpage on port `8000`
 
-i did so using he command below
+I did so using the command below
 
 `sudo vi /etc/apache2/ports.conf`
 
@@ -77,19 +77,19 @@ next is to open file `000-default.conf` and change virtual host port form `80` t
 
 ![change virtual port to 8000](<img/11 change virtual port to 8000.png>)
 
-next i restarted apache to load the new configuration using te code below
+next, I restarted apache to load the new configuration using the code below
 
 `sudo systemctl restart apache2`
 
 ![restart apache](<img/12 restart apache.png>)
 
-next i opened a new file `index.html` using the code below
+next, I opened a new file `index.html` using the code below
 
 `sudo vi index.html`
 
 ![create a new index file](<img/13 crate a new index file.png>)
 
-after switching to **vi** editor i typed the code below
+after switching to **vi** editor I typed the code below
 
 >
          <!DOCTYPE html>
@@ -106,59 +106,59 @@ after switching to **vi** editor i typed the code below
 
 ![type code](<img/14 code with my EC2 public ip addess.png>)
 
-next i changed the file ownership of the index.html file using the code below
+next, I changed the file ownership of the index.html file using the code below
 
 `sudo chown www-data:www-data ./index.html`
 
 ![change file ownership](<img/15 change file ownership of the index file.png>)
 
-next i override the default html file of Apache Webserver suing the code below
+next, I override the default html file of Apache Webserver suing the code below
 
 `sudo cp -f ./index.html /var/www/html/index.html`
 
 ![replace the default html file](<img/16 replace the default index file with the new one created.png>)
 
-afterwhich i restart the webserver to load the new configuration using the command below
+After I restart the webserver to load the new configuration using the command below
 
 `sudo systemctl restart apache2`
 
 ![restart the apache webserver](<img/17 restart the apache webserver.png>)
 
-output of the IP address on a webrowser is seen as below
+The output of the IP address on a web browser is seen below
 
 ![web browser output](<img/18 web browser display of instance.png>)
 
 
-### At this stage i will repeat this process for the second webserver from configuring the inbound rule to restarting the webserver afer replacing the old index file with the new one
+### At this stage I will repeat this process for the second web server from configuring the inbound rule to restarting the webserver after replacing the old index file with the new one
 
-after configuring the second server i moved on to the third which is my ___LOADBALANCER___
+after configuring the second server I moved on to the third which is my ___LOADBALANCER___
 
-First of all i configured the inbound rules with the following setting 
+First of all, I configured the inbound rules with the following setting 
 `custom tcp`
 `port 80`
 `anywhere ipv4`
 
 ![all traffic allowed](<img/19 load balancer port 80 is open to recieve traffic.png>)
 
-next i installed Nginx using the code below
+next, I installed Nginx using the code below
 
 `sudo apt update -y && sudo apt install nginx -y`
 
 ![install nginx](<img/20 install nginx in loadbalancer.png>)
 
-next i verify Nginx is running using the code below
+next, I verified that Nginx is running using the code below
 
 `sudo systemctl status nginx`
 
 ![verfy nginx is running](<img/21 verify nginx is running.png>)
 
-next i opened Nginx configuration file using the code below
+next, I opened Nginx configuration file using the code below
 
 `sudo vi /etc/nginx/conf.d/loadbalancer.conf`
 
 ![edit nginx configuration file](<img/22 code to open nginx configuration file.png>)
 
-next i typed the code below
+next I typed the code below
 
 >         
         upstream backend_servers {
@@ -184,7 +184,7 @@ next i typed the code below
 ![code configuration Nginx](<img/23 nginx code configuration.png>)
 
 
-next i test my configuration using the code below
+next, I test my configuration using the code below
 
 `sudo nginx -t`
 
@@ -193,17 +193,17 @@ next i test my configuration using the code below
 ![code configuration Nginx 2](<img/25 nginx test code is ok.png>)
 
 
-afterwhich i restart nginx to load the new configuraion using the command below
+After I restart nginx to load the new configuration using the command below
 
 `sudo systemctl restart nginx`
 
 ![restart nginx server](<img/26 restart nginx server.png>)
 
-after this step i pasted the public adress of my Nginx server on my browser and it gave the output below
+after this step, I pasted the public address of my Nginx server on my browser and it gave the output below
 
 ![loadbalancing successful](<img/27 load balancing successful.png>)
 
-continous refreshing the the webpage will output the ip address the two webservers 
+continuous refreshing the the webpage will output the IP address of the two web servers 
 
 
 
