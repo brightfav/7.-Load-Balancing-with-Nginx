@@ -91,16 +91,18 @@ next i opened a new file `index.html` using the code below
 
 after switching to **vi** editor i typed the code below
 
->        <!DOCTYPE html>
->        <html>
->        <head>
->            <title>My EC2 Instance</title>
->        </head>
->        <body>
->            <h1>Welcome to my EC2 instance</h1>
->            <p>Public IP: YOUR_PUBLIC_IP</p>
->        </body>
->        </html>
+>
+         <!DOCTYPE html>
+        <html>
+        <head>
+            <title>My EC2 Instance</title>
+        </head>
+        <body>
+            <h1>Welcome to my EC2 instance</h1>
+            <p>Public IP: YOUR_PUBLIC_IP</p>
+        </body>
+        </html>
+
 
 ![type code](<14 code with my EC2 public ip addess.png>)
 
